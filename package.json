@@ -1,5 +1,7 @@
 {
+  "name": "coin",
   "private": true,
+  "packageManager": "pnpm@7.15.0",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -12,7 +14,5 @@
     "eslint-config-custom": "workspace:*",
     "prettier": "^2.5.1",
     "turbo": "latest"
-  },
-  "packageManager": "pnpm@7.15.0",
-  "name": "coin"
+  }
 }
