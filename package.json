@@ -8,7 +8,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "dev:web": "pnpm dev --filter client",
-    "test:hardhat": "pnpm test --filter hardhat"
+    "test:hardhat": "pnpm test --filter hardhat-app",
+    "dev:hardhat": "pnpm dev --filter hardhat-app"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",

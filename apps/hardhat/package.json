@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "pnpm hardhat compile",
     "test": "npx hardhat test",
-    "dev": "npx hardhat run --network localhost --show-stack-traces scripts/deploy.ts"
+    "dev": "npx hardhat node",
+    "deploy": "npx hardhat run --network localhost --show-stack-traces scripts/deploy.ts"
   },
   "dependencies": {
     "@chainlink/contracts": "^0.6.1",
