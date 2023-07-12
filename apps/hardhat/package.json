@@ -1,10 +1,11 @@
 {
-  "name": "hardhat-project",
+  "name": "hardhat",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "compile": "pnpm hardhat compile"
+    "compile": "pnpm hardhat compile",
+    "test": "npx hardhat test"
   },
   "dependencies": {
     "hardhat": "^2.16.1"
@@ -21,7 +22,6 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.4.1",
     "chai": "^4.3.7",
-    "ethers": "^6.6.2",
     "hardhat-gas-reporter": "^1.0.9",
     "solidity-coverage": "^0.8.4",
     "ts-node": "^10.9.1",
