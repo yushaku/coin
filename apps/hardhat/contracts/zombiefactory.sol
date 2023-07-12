@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity =0.8.18;
 
-import "./ownable.sol";
+import "./lib/ownable.sol";
 import "./lib/safemath.sol";
 
 contract ZombieFactory is Ownable {
