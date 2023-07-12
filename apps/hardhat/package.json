@@ -1,12 +1,12 @@
 {
-  "name": "hardhat",
+  "name": "hardhat-app",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "compile": "pnpm hardhat compile",
     "test": "npx hardhat test",
-    "dev": "npx hardhat run --network localhost scripts/deploy.ts"
+    "dev": "npx hardhat run --network localhost --show-stack-traces scripts/deploy.ts"
   },
   "dependencies": {
     "@chainlink/contracts": "^0.6.1",
