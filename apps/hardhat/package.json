@@ -7,11 +7,13 @@
     "compile": "pnpm hardhat compile",
     "test": "npx hardhat test",
     "dev": "npx hardhat node",
-    "deploy": "npx hardhat run --network localhost --show-stack-traces scripts/deploy.ts"
+    "local": "npx hardhat run scripts/deploy.ts --network hardhat"
   },
   "dependencies": {
     "@chainlink/contracts": "^0.6.1",
-    "ethers": "^6.1.0",
+    "@openzeppelin/contracts": "^4.9.2",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.6.3",
     "hardhat": "^2.16.1"
   },
   "devDependencies": {
@@ -24,8 +26,9 @@
     "@typechain/hardhat": "^8.0.0",
     "@types/chai": "^4.3.5",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^20.4.1",
+    "@types/node": "^20.4.2",
     "chai": "^4.3.7",
+    "hardhat-deploy": "^0.11.34",
     "hardhat-gas-reporter": "^1.0.9",
     "solidity-coverage": "^0.8.4",
     "ts-node": "^10.9.1",
