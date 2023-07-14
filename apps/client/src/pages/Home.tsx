@@ -1,8 +1,10 @@
 import { avlNetwork } from "../utils";
+import { abi } from "abi/contracts/token.sol/Token.json";
 import { ethers, BrowserProvider, parseUnits } from "ethers";
 import { useState, useEffect } from "react";
 
 const url = "http://localhost:8545";
+const address = "0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401";
 
 export const Home = () => {
   const [balance, setBalance] = useState<string | undefined>();
@@ -13,27 +15,21 @@ export const Home = () => {
 
   useEffect(() => {
     if (!window.ethereum) return;
+    const browserProvider = new ethers.BrowserProvider(window.ethereum);
   }, [currentAccount]);
 
   const onClickConnect = async () => {
     if (!window.ethereum) return;
     const browserProvider = new ethers.BrowserProvider(window.ethereum);
-    const provider = new ethers.JsonRpcProvider(url);
     const signer = await browserProvider.getSigner();
 
-    browserProvider
-      .getBalance(
-        currentAccount || "0x4aBfCf64bB323CC8B65e2E69F2221B14943C6EE1"
-      )
-      .then((balance) => setBalance(balance.toString()));
+    const provider = new ethers.JsonRpcProvider(
+      "https://mainnet.infura.io/v3/354872a8849140a48afe69abdea29f00"
+    );
+    const contract = new ethers.Contract(address, abi, provider);
+    console.log(contract);
 
-    browserProvider.getNetwork().then((data) => {
-      setNetwork(data.chainId.toString());
-    });
-
-    browserProvider.listAccounts().then((accList) => {
-      setCurrentAccount(accList[0].address);
-    });
+    contract.ens().then((balance) => console.log({ balance }));
   };
 
   const onClickDisconnect = () => {
