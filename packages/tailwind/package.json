@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "license": "ISC",
   "devDependencies": {
-    "tailwindcss": "^3.3.3",
     "@tailwindcss/line-clamp": "^0.4.4",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.26",
     "prettier-plugin-tailwindcss": "^0.1.11",
-    "postcss": "^8.4.24"
+    "tailwindcss": "^3.3.3",
+    "tailwindcss-animate": "^1.0.6"
   },
   "files": [
     "tailwind.config.js",
