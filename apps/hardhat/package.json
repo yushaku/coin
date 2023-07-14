@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "compile": "pnpm hardhat compile",
+    "build": "pnpm compile & ./get_abi.sh",
     "test": "npx hardhat test",
     "dev": "npx hardhat node",
     "local": "npx hardhat run scripts/deploy.ts --network hardhat"
