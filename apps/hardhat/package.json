@@ -5,10 +5,10 @@
   "license": "MIT",
   "scripts": {
     "compile": "pnpm hardhat compile",
-    "build": "pnpm compile & ./get_abi.sh",
+    "build": "pnpm compile && ./get_abi.sh",
     "test": "npx hardhat test",
     "dev": "npx hardhat node",
-    "local": "npx hardhat run scripts/deploy.ts --network hardhat"
+    "local": "npx hardhat run scripts/deploy.ts --network rinkeby"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
