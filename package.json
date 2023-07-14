@@ -7,7 +7,7 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "dev:web": "pnpm dev --filter client",
+    "dev:client": "pnpm dev --filter client",
     "test:hardhat": "pnpm test --filter hardhat-app",
     "dev:hardhat": "pnpm dev --filter hardhat-app"
   },
@@ -15,10 +15,8 @@
     "@turbo/gen": "^1.9.7",
     "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
+    "tailwind-config": "workspace:*",
     "prettier": "^2.5.1",
     "turbo": "latest"
-  },
-  "dependencies": {
-    "uuid": "^9.0.0"
   }
 }

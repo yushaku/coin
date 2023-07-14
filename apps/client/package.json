@@ -4,18 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 3000",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "axios": "^1.4.0",
-    "moralis-v1": "^1.13.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-moralis": "^1.4.2",
-    "react-router-dom": "^6.14.1"
+    "react-router-dom": "^6.14.1",
+    "tailwind-config": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",
