@@ -5,6 +5,7 @@ import "@nomicfoundation/hardhat-toolbox";
 import dotenv from "dotenv";
 
 dotenv.config();
+const { ALCHEMY_API_URL, WALLET_PRIVATE_KEY } = process.env;
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -42,6 +43,10 @@ const config: HardhatUserConfig = {
       accounts: process.env.MNEMONIC
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
+    },
+    sepolia: {
+      url: ALCHEMY_API_URL,
+      accounts: [`0x${WALLET_PRIVATE_KEY}`],
     },
   },
   // etherscan: {

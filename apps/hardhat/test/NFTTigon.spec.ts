@@ -1,4 +1,4 @@
-import { NFTTigon } from "../typechain-types";
+import { NFTTigon } from "../typechain";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 

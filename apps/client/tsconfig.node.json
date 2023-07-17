@@ -27,12 +27,7 @@
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo/build", // avoid clobbering the cypress tsbuildinfo
     "types": ["jest"],
     "useUnknownInCatchVariables": false,
-    "typeRoots": ["./node_modules/@types", "./src/@types/"],
-    "baseUrl": ".",
-    "paths": {
-      "@/": ["src/*"],
-      "pages": ["src/pages"]
-    }
+    "typeRoots": ["./node_modules/@types", "./src/@types/"]
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*", "src/**/*.json"],

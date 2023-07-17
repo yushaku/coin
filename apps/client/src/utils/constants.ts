@@ -22,3 +22,5 @@ export const avlNetwork = {
     blockExplorerUrls: ["https://snowtrace.io/"],
   },
 };
+
+export const CONTRACT_ADDRESS = "";
