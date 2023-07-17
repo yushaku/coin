@@ -2,10 +2,11 @@ import { HardhatUserConfig } from "hardhat/config";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
 import "@nomicfoundation/hardhat-toolbox";
+import "@nomicfoundation/hardhat-ethers";
 import dotenv from "dotenv";
 
 dotenv.config();
-const { ALCHEMY_API_URL, WALLET_PRIVATE_KEY } = process.env;
+const { ALCHEMY_API_URL, WALLET_PRIVATE_KEY, INFURA_PROJECT_ID } = process.env;
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -26,20 +27,20 @@ const config: HardhatUserConfig = {
       url: "https://api.avax-test.network/ext/bc/C/rpc",
       gasPrice: 225000000000,
       chainId: 43113,
-      accounts: [process.env.WALLET_PRIVATE_KEY || ""],
+      accounts: [WALLET_PRIVATE_KEY!],
     },
     mainnet: {
-      url: `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+      url: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
       accounts: [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
     },
     rinkeby: {
-      url: `https://sepolia.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+      url: `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
       accounts: process.env.MNEMONIC
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
     },
     goerli: {
-      url: `https://goerli.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+      url: `https://goerli.infura.io/v3/${INFURA_PROJECT_ID}`,
       accounts: process.env.MNEMONIC
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),

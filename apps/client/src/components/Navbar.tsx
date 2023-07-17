@@ -22,6 +22,7 @@ const Navbar = () => {
           Login
         </li>
       </ul>
+
       <div className="flex relative">
         {!toggleMenu && (
           <HiMenuAlt4
@@ -30,6 +31,7 @@ const Navbar = () => {
             onClick={() => setToggleMenu(true)}
           />
         )}
+
         {toggleMenu && (
           <AiOutlineClose
             fontSize={28}
@@ -37,6 +39,7 @@ const Navbar = () => {
             onClick={() => setToggleMenu(false)}
           />
         )}
+
         {toggleMenu && (
           <ul
             className="z-10 fixed -top-0 -right-2 p-3 w-[70vw] h-screen shadow-2xl md:hidden list-none

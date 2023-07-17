@@ -1,8 +1,9 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import { Toaster } from "react-hot-toast";
 import { RecoilRoot } from "recoil";
+import App from "./App.tsx";
 import { TransactionsProvider } from "./hooks/TransactionContext.tsx";
 import "./main.css";
 
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <RecoilRoot>
       <ApolloProvider client={client}>
         <TransactionsProvider>
+          <Toaster />
           <App />
         </TransactionsProvider>
       </ApolloProvider>

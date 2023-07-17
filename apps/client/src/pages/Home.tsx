@@ -11,6 +11,7 @@ export const Home = () => {
         <Navbar />
         <Welcome />
       </div>
+
       <Services />
       <Transactions />
       <Footer />

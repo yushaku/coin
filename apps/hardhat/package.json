@@ -8,7 +8,8 @@
     "build": "pnpm compile && ./get_abi.sh",
     "test": "npx hardhat test",
     "dev": "npx hardhat node",
-    "local": "npx hardhat run scripts/deploy.ts --network hardhat"
+    "deploy:local": "npx hardhat run scripts/deploy.ts --network hardhat",
+    "deploy:sepolia": "npx hardhat run scripts/deploy.transaction.ts --network sepolia"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.2",

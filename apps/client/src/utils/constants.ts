@@ -23,4 +23,4 @@ export const avlNetwork = {
   },
 };
 
-export const CONTRACT_ADDRESS = "";
+export const CONTRACT_ADDRESS = "0x37920F743B5571a14fD383Aa4798C9Fd8294204d";
