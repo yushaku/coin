@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { ethers, formatUnits, parseEther, toBeHex } from "ethers";
-import { CONTRACT_ADDRESS } from "../utils/constants";
+import { ADDRESS } from "../utils/constants";
 import { abi } from "abi/contracts/Transactions.sol/Transactions.json";
 import toast from "react-hot-toast";
 
@@ -26,7 +26,7 @@ const { ethereum } = window;
 
 const createEthereumContract = async () => {
   const provider = new ethers.BrowserProvider(ethereum);
-  const transProvider = new ethers.Contract(CONTRACT_ADDRESS, abi, provider);
+  const transProvider = new ethers.Contract(ADDRESS.TRANSACTION, abi, provider);
   const signer = await provider.getSigner();
 
   return { transProvider, signer };
@@ -127,30 +127,38 @@ export const TransactionsProvider = ({ children }: any) => {
         const { transProvider } = await createEthereumContract();
         const parsedAmount = parseEther(amount);
 
-        await ethereum.request({
-          method: "eth_sendTransaction",
-          params: [
-            {
-              from: currentAccount,
-              to: addressTo,
-              gas: "0x5208", // 21000 GWEI
-              value: toBeHex(parsedAmount),
-            },
-          ],
-        });
+        // await ethereum.request({
+        //   method: "eth_sendTransaction",
+        //   params: [
+        //     {
+        //       from: currentAccount,
+        //       to: addressTo,
+        //       gas: "0x5208", // 21000 GWEI
+        //       value: toBeHex(parsedAmount),
+        //     },
+        //   ],
+        // });
 
-        const transactionHash =
-          await transProvider.addToBlock.populateTransaction(
-            addressTo,
-            parsedAmount,
-            message,
-            keyword
-          );
+        const estimateGas = await transProvider.addToBlock.estimateGas(
+          addressTo,
+          parsedAmount,
+          message,
+          keyword
+        );
+        toast(`gas fee: ${estimateGas}`);
+
+        const transactionHash = await transProvider.addToBlock.staticCall(
+          addressTo,
+          parsedAmount,
+          message,
+          keyword
+        );
 
         console.log(transactionHash);
 
         const transactionsCount = await transProvider.getTransactionCount();
         setTransactionCount(formatUnits(transactionsCount));
+        toast.success(`the transactions count: ${transactionCount}`);
         // window.location.reload();
       } else {
         console.log("No ethereum object");

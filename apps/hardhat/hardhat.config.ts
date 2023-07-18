@@ -2,7 +2,9 @@ import { HardhatUserConfig } from "hardhat/config";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
 import "@nomicfoundation/hardhat-toolbox";
+import "@nomicfoundation/hardhat-verify";
 import "@nomicfoundation/hardhat-ethers";
+
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -47,12 +49,13 @@ const config: HardhatUserConfig = {
     },
     sepolia: {
       url: ALCHEMY_API_URL,
+      chainId: 11155111,
       accounts: [`0x${WALLET_PRIVATE_KEY}`],
     },
   },
-  // etherscan: {
-  //   apiKey: process.env.ETHERSCAN_API_KEY,
-  // },
+  etherscan: {
+    apiKey: "ZQ3E4BTAX34QM5IM5ERXRX7FG1EFGX713G",
+  },
   typechain: {
     outDir: "./typechain",
   },
