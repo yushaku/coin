@@ -1,0 +1,24 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: transaction
+    network: sepolia
+    source:
+      address: "0x37920F743B5571a14fD383Aa4798C9Fd8294204d"
+      abi: transaction
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: transaction
+          file: ./abis/transaction.json
+      eventHandlers:
+        - event: Transfer(address,address,uint256,string,uint256,string)
+          handler: handleTransfer
+      file: ./src/transaction.ts

@@ -1,13 +1,12 @@
-type Token @entity {
-  id: ID!
-  decimals: Int
-  name: String
-  symbol: String
-}
-
-type Transfer @entity {
-  id: ID!
-  from: String!
-  to: String!
-  value: BigInt!
+type Transfer @entity(immutable: true) {
+  id: Bytes!
+  _from: Bytes! # address
+  _receiver: Bytes! # address
+  _amount: BigInt! # uint256
+  _message: String! # string
+  _timestamp: BigInt! # uint256
+  keyword: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
