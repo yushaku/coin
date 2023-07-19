@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "ERC721",
-  "sourceName": "contracts/interface/erc721.sol",
+  "sourceName": "contracts/lib/erc721.sol",
   "abi": [
     {
       "anonymous": false,

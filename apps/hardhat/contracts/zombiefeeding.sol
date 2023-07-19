@@ -2,7 +2,7 @@
 pragma solidity =0.8.18;
 
 import "./zombiefactory.sol";
-import "./interface/kitty.sol";
+import "./lib/kitty.sol";
 
 contract ZombieFeeding is ZombieFactory {
   KittyInterface kittyContract;

@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "KittyInterface",
-  "sourceName": "contracts/interface/kitty.sol",
+  "sourceName": "contracts/lib/kitty.sol",
   "abi": [
     {
       "inputs": [

@@ -2,7 +2,7 @@
 pragma solidity =0.8.18;
 
 import "./zombieattack.sol";
-import "./interface/erc721.sol";
+import "./lib/erc721.sol";
 import "./lib/safemath.sol";
 
 contract ZombieOwnership is ZombieAttack, ERC721 {
