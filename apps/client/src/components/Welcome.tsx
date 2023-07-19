@@ -1,10 +1,10 @@
-import { useContext } from "react";
-import { AiFillPlayCircle } from "react-icons/ai";
-import { SiEthereum } from "react-icons/si";
-import { BsInfoCircle } from "react-icons/bs";
 import { TransactionContext } from "../hooks/TransactionContext";
 import { shortenAddress } from "../utils/shortenAddress";
 import Loader from "./Loader";
+import { useContext } from "react";
+import { AiFillPlayCircle } from "react-icons/ai";
+import { BsInfoCircle } from "react-icons/bs";
+import { SiEthereum } from "react-icons/si";
 
 const companyCommonStyles =
   "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
@@ -27,7 +27,6 @@ const Welcome = () => {
     handleChange,
     sendTransaction,
     formData,
-    isLoading,
   } = useContext(TransactionContext);
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -130,17 +129,13 @@ const Welcome = () => {
               handleChange={handleChange}
             />
 
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="text-white w-full mt-6 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
-              >
-                Send now
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="text-white w-full mt-6 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+            >
+              Send now
+            </button>
           </div>
         </div>
       </div>

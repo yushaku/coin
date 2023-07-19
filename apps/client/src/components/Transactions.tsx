@@ -1,6 +1,6 @@
-import { useContext } from "react";
-import { historyMoc, shortenAddress } from "../utils";
 import { useFetch, TransactionContext } from "../hooks";
+import { historyMoc, shortenAddress } from "../utils";
+import { useContext } from "react";
 
 const TransactionsCard = ({
   addressTo,
@@ -81,7 +81,7 @@ const Transactions = () => {
         )}
 
         <div className="flex flex-wrap justify-center items-center mt-10">
-          {[...historyMoc, ...transactions].reverse().map((transaction, i) => (
+          {[...historyMoc, ...transactions].map((transaction, i) => (
             <TransactionsCard key={i} {...transaction} />
           ))}
         </div>

@@ -1,7 +1,7 @@
-import { createContext, useEffect, useState } from "react";
-import { ethers, formatUnits, parseEther, toBeHex } from "ethers";
 import { ADDRESS } from "../utils/constants";
 import { abi } from "abi/contracts/Transactions.sol/Transactions.json";
+import { ethers, formatUnits, parseEther, toBeHex } from "ethers";
+import { createContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -9,7 +9,6 @@ type Props = {
   connectWallet: () => Promise<void>;
   transactions: never[];
   currentAccount: string;
-  isLoading: boolean;
   sendTransaction: () => Promise<void>;
   handleChange: (e: any, name: string) => void;
   formData: {
@@ -34,7 +33,6 @@ const createEthereumContract = async () => {
 
 export const TransactionsProvider = ({ children }: any) => {
   const [currentAccount, setCurrentAccount] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(
     localStorage.getItem("transactionCount")
   );
@@ -61,14 +59,14 @@ export const TransactionsProvider = ({ children }: any) => {
 
     const structuredTransactions = availableTransactions.map(
       (transaction: any) => ({
-        addressTo: transaction.receiver,
+        addressTo: transaction.reseiver,
         addressFrom: transaction.sender,
         timestamp: new Date(
-          transaction.timestamp.toNumber() * 1000
+          Number(transaction.timestamp) * 1000
         ).toLocaleString(),
         message: transaction.message,
         keyword: transaction.keyword,
-        amount: parseInt(transaction.amount._hex) / 10 ** 18,
+        amount: Number(transaction.amount) / 10 ** 9,
       })
     );
 
@@ -145,8 +143,8 @@ export const TransactionsProvider = ({ children }: any) => {
           message,
           keyword
         );
-        toast(`gas fee: ${estimateGas}`);
 
+        toast(`gas fee: ${estimateGas}`);
         const transactionHash = await transProvider.addToBlock.staticCall(
           addressTo,
           parsedAmount,
@@ -180,7 +178,6 @@ export const TransactionsProvider = ({ children }: any) => {
         connectWallet,
         transactions,
         currentAccount,
-        isLoading,
         sendTransaction,
         handleChange,
         formData,
