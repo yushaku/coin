@@ -1,4 +1,5 @@
-import chainRouter from "./routers/chains";
+import authRouter from "./routers/auth.router";
+import walletRouter from "./routers/wallet.router";
 import dotenv from "dotenv";
 import express, { Express, Request, Response } from "express";
 import Moralis from "moralis";
@@ -8,7 +9,8 @@ const { PORT = 8005, MORALIS_API_KEY = "" } = process.env;
 
 const app: Express = express();
 
-app.use("/chain", chainRouter);
+app.use("/chain", walletRouter);
+app.use("/auth", authRouter);
 app.get("/", (_req: Request, res: Response) => {
   res.send("<h1>Express + TypeScript Server</h1>");
 });

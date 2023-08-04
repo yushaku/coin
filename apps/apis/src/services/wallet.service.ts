@@ -2,6 +2,15 @@ import { EvmChain } from "@moralisweb3/common-evm-utils";
 import Moralis from "moralis";
 
 const chain = EvmChain.SEPOLIA;
+const chains = [EvmChain.ETHEREUM, EvmChain.BSC, EvmChain.POLYGON];
+
+async function getChain(address: string) {
+  const response = await Moralis.EvmApi.wallets.getWalletActiveChains({
+    address,
+    chains,
+  });
+  console.log(response.toJSON());
+}
 
 async function getDemoData(address: string) {
   const nativeBalance = await Moralis.EvmApi.balance.getNativeBalance({
