@@ -321,6 +321,10 @@
   margin-left: 20px !important;
 }
 
+.ant-input-number-handler-wrap button {
+  display: none;
+}
+
 .ant-modal-close-icon {
   color: #363e54 !important;
   transition: 0.3s;

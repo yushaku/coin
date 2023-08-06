@@ -1,23 +1,89 @@
 import { Setting } from "../components/swap/Setting";
+import { getTokenPrices } from "../services/tokens";
 import { tokenList } from "../utils";
 import {
   ArrowDownOutlined,
   DownOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Input, Modal, Popover } from "antd";
-import { useState } from "react";
+import { Input, Modal, Popover, message } from "antd";
+import axios from "axios";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useAccount, useSendTransaction, useWaitForTransaction } from "wagmi";
 
 export const SwapPage = () => {
-  const isConnected = true;
-
+  const { isConnected, address } = useAccount();
+  const [messageApi, contextHolder] = message.useMessage();
   const [isOpen, setIsOpen] = useState(false);
   const [slippage, setSlippage] = useState(2.5);
   const [tokenOneAmount, setTokenOneAmount] = useState(0);
   const [tokenTwoAmount, setTokenTwoAmount] = useState(0);
   const [changeToken, setChangeToken] = useState(1);
+  const [prices, setPrices] = useState<{
+    tokenOne: number;
+    tokenTwo: number;
+    ratio: number;
+  } | null>(null);
   const [tokenOne, setTokenOne] = useState(tokenList[0]);
   const [tokenTwo, setTokenTwo] = useState(tokenList[1]);
+  const [transactionDetails, setTransactionDetails] = useState({
+    to: null,
+    data: null,
+    value: null,
+  });
+
+  const { data, sendTransaction } = useSendTransaction({
+    to: String(transactionDetails.to),
+    account: address,
+    // from: address,
+    // data: String(transactionDetails.data),
+    // value: String(transactionDetails.value),
+  });
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
+
+  useEffect(() => {
+    getTokenPrices(tokenOne.address, tokenTwo.address).then((data) =>
+      setPrices(data)
+    );
+  }, [tokenOne, tokenTwo]);
+
+  useEffect(() => {
+    messageApi.destroy();
+
+    if (isLoading) {
+      messageApi.open({
+        type: "loading",
+        content: "Transaction is Pending...",
+        duration: 0,
+      });
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (transactionDetails.to && isConnected) {
+      sendTransaction();
+    }
+  }, [transactionDetails]);
+
+  useEffect(() => {
+    messageApi.destroy();
+    if (isSuccess) {
+      messageApi.open({
+        type: "success",
+        content: "Transaction Successful",
+        duration: 1.5,
+      });
+    } else if (transactionDetails.to) {
+      messageApi.open({
+        type: "error",
+        content: "Transaction Failed",
+        duration: 1.5,
+      });
+    }
+  }, [isSuccess]);
 
   function openModal(num: number) {
     setIsOpen(true);
@@ -28,37 +94,74 @@ export const SwapPage = () => {
     setSlippage(e.target.value);
   }
 
-  function changeAmount(e: any) {
-    setTokenOneAmount(e.target.value);
-  }
-
   function switchTokens() {
-    // setPrices(null);
-    // setTokenOneAmount(null);
-    // setTokenTwoAmount(null);
+    setPrices(null);
+    setTokenOneAmount(0);
+    setTokenTwoAmount(0);
     const one = tokenOne;
     const two = tokenTwo;
     setTokenOne(two);
     setTokenTwo(one);
-    // fetchPrices(two.address, one.address);
+    getTokenPrices(two.address, one.address);
   }
 
   function modifyToken(i: number) {
-    // setPrices(null);
+    setPrices(null);
     setTokenOneAmount(0);
     setTokenTwoAmount(0);
     if (changeToken === 1) {
       setTokenOne(tokenList[i]);
-      // fetchPrices(tokenList[i].address, tokenTwo.address);
+      getTokenPrices(tokenList[i].address, tokenTwo.address);
     } else {
       setTokenTwo(tokenList[i]);
-      // fetchPrices(tokenOne.address, tokenList[i].address);
+      getTokenPrices(tokenOne.address, tokenList[i].address);
     }
     setIsOpen(false);
   }
 
+  function changeAmount(e: ChangeEvent<HTMLInputElement>) {
+    const value = Number(e.target.value);
+
+    setTokenOneAmount(value);
+    if (value && prices) {
+      setTokenTwoAmount(Number((value * prices.ratio).toFixed(2)));
+    } else {
+      setTokenTwoAmount(0);
+    }
+  }
+
+  async function fetchDexSwap() {
+    const allowance = await axios.get(
+      `https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`
+    );
+
+    if (allowance.data.allowance === "0") {
+      const approve = await axios.get(
+        `https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${tokenOne.address}`
+      );
+
+      setTransactionDetails(approve.data);
+      console.log("not approved");
+      return;
+    }
+
+    const tx = await axios.get(
+      `https://api.1inch.io/v5.0/1/swap?fromTokenAddress=${
+        tokenOne.address
+      }&toTokenAddress=${tokenTwo.address}&amount=${tokenOneAmount.padEnd(
+        tokenOne.decimals + tokenOneAmount.length,
+        "0"
+      )}&fromAddress=${address}&slippage=${slippage}`
+    );
+
+    let decimals = Number(`1E${tokenTwo.decimals}`);
+    setTokenTwoAmount(Number(tx.data.toTokenAmount) / decimals);
+    setTransactionDetails(tx.data.tx);
+  }
+
   return (
     <section className="flexCenter min-h-[75dvh]">
+      {contextHolder}
       <div className="tradeBox">
         <div className="flex justify-between items-center w-[90%] py-3">
           <h4 className="text-lime-50 text-2xl font-semibold">Swap</h4>
@@ -81,8 +184,8 @@ export const SwapPage = () => {
           <Input
             placeholder="0"
             value={tokenOneAmount}
-            onChange={changeAmount}
-            // disabled={!prices}
+            onChange={(e) => changeAmount(e)}
+            disabled={!prices}
           />
           <Input placeholder="0" value={tokenTwoAmount} disabled={true} />
 
@@ -111,6 +214,14 @@ export const SwapPage = () => {
         <button
           className="swapButton"
           disabled={!tokenOneAmount || !isConnected}
+          onClick={async () => {
+            const res = await fetchDexSwap(
+              tokenOne.address,
+              tokenTwo.address,
+              address!
+            );
+            setTransactionDetails(res);
+          }}
         >
           Swap
         </button>

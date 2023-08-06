@@ -10,7 +10,13 @@ dotenv.config();
 const { PORT = 8005, MORALIS_API_KEY = "" } = process.env;
 
 const app: Express = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+  })
+);
 
 app.use("/tokens", tokensRouter);
 app.use("/wallet", chainRouter);

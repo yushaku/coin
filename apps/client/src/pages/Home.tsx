@@ -5,9 +5,7 @@ import Welcome from "../components/Welcome";
 export const HomePage = () => {
   return (
     <div>
-      <Welcome />
       <Services />
-      <Transactions />
     </div>
   );
 };
