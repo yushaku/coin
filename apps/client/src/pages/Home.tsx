@@ -1,20 +1,13 @@
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import Services from "../components/Services";
 import Transactions from "../components/Transactions";
 import Welcome from "../components/Welcome";
 
-export const Home = () => {
+export const HomePage = () => {
   return (
-    <div className="min-h-screen">
-      <div className="gradient-bg-welcome">
-        <Navbar />
-        <Welcome />
-      </div>
-
+    <div>
+      <Welcome />
       <Services />
       <Transactions />
-      <Footer />
     </div>
   );
 };

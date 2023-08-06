@@ -1,15 +1,24 @@
-import { Home } from "./pages";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-]);
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
+import { HomePage, SwapPage, TokenPage } from "./pages";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <div className="gradient-bg-welcome">
+      <Navbar />
+
+      <article className="min-h-screen">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/swap" element={<SwapPage />} />
+          <Route path="/tokens" element={<TokenPage />} />
+        </Routes>
+      </article>
+
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
