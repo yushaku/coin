@@ -8,6 +8,7 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "dev:client": "pnpm dev --filter client",
+    "dev:apis": "pnpm dev --filter apis",
     "test:hardhat": "pnpm test --filter hardhat-app",
     "dev:hardhat": "pnpm dev --filter hardhat-app"
   },
