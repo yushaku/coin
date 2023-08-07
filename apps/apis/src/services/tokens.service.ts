@@ -15,4 +15,10 @@ async function getPairtokensPrice(addressOne: string, addressTwo: string) {
   return prices;
 }
 
-export default { getPairtokensPrice };
+async function getToptoken() {
+  const top = await Moralis.EvmApi.marketData.getTopERC20TokensByMarketCap();
+  console.log(top);
+  return top;
+}
+
+export default { getPairtokensPrice, getToptoken };

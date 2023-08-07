@@ -1,22 +1,13 @@
 import { ADDRESS } from "../utils/constants";
 import { abi } from "abi/contracts/Transactions.sol/Transactions.json";
-import { ethers, formatUnits, parseEther, toBeHex } from "ethers";
+import { ethers } from "ethers";
 import { createContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type Props = {
   transactionCount: string | null;
-  connectWallet: () => Promise<void>;
   transactions: never[];
   currentAccount: string;
-  sendTransaction: () => Promise<void>;
-  handleChange: (e: any, name: string) => void;
-  formData: {
-    addressTo: string;
-    amount: string;
-    keyword: string;
-    message: string;
-  };
 };
 
 export const TransactionContext = createContext<Props>({} as Props);
@@ -37,16 +28,6 @@ export const TransactionsProvider = ({ children }: any) => {
     localStorage.getItem("transactionCount")
   );
   const [transactions, setTransactions] = useState([]);
-  const [formData, setformData] = useState({
-    addressTo: "0x4f5b20eaD662E7Cde0a4Ae035AfBcEa398A961E6",
-    amount: "0.001",
-    keyword: "test",
-    message: "test",
-  });
-
-  function handleChange(e: any, name: string) {
-    setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
-  }
 
   async function getAllTransactions() {
     if (!ethereum) {
@@ -118,69 +99,12 @@ export const TransactionsProvider = ({ children }: any) => {
     }
   }
 
-  async function sendTransaction() {
-    try {
-      if (ethereum) {
-        const { addressTo, amount, keyword, message } = formData;
-        const { transProvider } = await createEthereumContract();
-        const parsedAmount = parseEther(amount);
-
-        // await ethereum.request({
-        //   method: "eth_sendTransaction",
-        //   params: [
-        //     {
-        //       from: currentAccount,
-        //       to: addressTo,
-        //       gas: "0x5208", // 21000 GWEI
-        //       value: toBeHex(parsedAmount),
-        //     },
-        //   ],
-        // });
-
-        const estimateGas = await transProvider.addToBlock.estimateGas(
-          addressTo,
-          parsedAmount,
-          message,
-          keyword
-        );
-
-        toast(`gas fee: ${estimateGas}`);
-        const transactionHash = await transProvider.addToBlock.staticCall(
-          addressTo,
-          parsedAmount,
-          message,
-          keyword
-        );
-
-        console.log(transactionHash);
-
-        const transactionsCount = await transProvider.getTransactionCount();
-        setTransactionCount(formatUnits(transactionsCount));
-        toast.success(`the transactions count: ${transactionCount}`);
-        // window.location.reload();
-      } else {
-        console.log("No ethereum object");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  useEffect(() => {
-    checkIfWalletIsConnect();
-    checkIfTransactionsExists();
-  }, [transactionCount]);
-
   return (
     <TransactionContext.Provider
       value={{
         transactionCount,
-        connectWallet,
         transactions,
         currentAccount,
-        sendTransaction,
-        handleChange,
-        formData,
       }}
     >
       {children}

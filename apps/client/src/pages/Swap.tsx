@@ -1,4 +1,5 @@
 import { Setting } from "../components/swap/Setting";
+import { axiosClient } from "../services/axiosclient";
 import { getTokenPrices } from "../services/tokens";
 import { tokenList } from "../utils";
 import {
@@ -6,8 +7,7 @@ import {
   DownOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Input, Modal, Popover, message } from "antd";
-import axios from "axios";
+import { Modal, Popover, message } from "antd";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useAccount, useSendTransaction, useWaitForTransaction } from "wagmi";
 
@@ -121,23 +121,30 @@ export const SwapPage = () => {
 
   function changeAmount(e: ChangeEvent<HTMLInputElement>) {
     const value = Number(e.target.value);
-
-    setTokenOneAmount(value);
-    if (value && prices) {
-      setTokenTwoAmount(Number((value * prices.ratio).toFixed(2)));
-    } else {
-      setTokenTwoAmount(0);
+    if (value >= 0) {
+      setTokenOneAmount(value);
+      if (value && prices) {
+        setTokenTwoAmount(Number((value * prices.ratio).toFixed(2)));
+      } else {
+        setTokenTwoAmount(0);
+      }
     }
   }
 
   async function fetchDexSwap() {
-    const allowance = await axios.get(
-      `https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`
+    const allowance = await axiosClient.get(
+      "https://api.1inch.dev/swap/v5.2/1/approve/allowance",
+      {
+        params: { tokenAddress: tokenOne.address, walletAddress: address },
+      }
     );
 
     if (allowance.data.allowance === "0") {
-      const approve = await axios.get(
-        `https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${tokenOne.address}`
+      const approve = await axiosClient.get(
+        "https://api.1inch.io/v5.2/1/approve/transaction",
+        {
+          params: { tokenAddress: tokenOne.address },
+        }
       );
 
       setTransactionDetails(approve.data);
@@ -145,14 +152,15 @@ export const SwapPage = () => {
       return;
     }
 
-    const tx = await axios.get(
-      `https://api.1inch.io/v5.0/1/swap?fromTokenAddress=${
-        tokenOne.address
-      }&toTokenAddress=${tokenTwo.address}&amount=${tokenOneAmount.padEnd(
-        tokenOne.decimals + tokenOneAmount.length,
-        "0"
-      )}&fromAddress=${address}&slippage=${slippage}`
-    );
+    const tx = await axiosClient.get("https://api.1inch.io/v5.2/1/swap", {
+      params: {
+        from: address,
+        src: tokenOne.address,
+        dst: tokenTwo.address,
+        amount: tokenOneAmount,
+        slippage: slippage,
+      },
+    });
 
     let decimals = Number(`1E${tokenTwo.decimals}`);
     setTokenTwoAmount(Number(tx.data.toTokenAmount) / decimals);
@@ -160,7 +168,7 @@ export const SwapPage = () => {
   }
 
   return (
-    <section className="flexCenter min-h-[75dvh]">
+    <section className="flexCenter min-h-[85dvh]">
       {contextHolder}
       <div className="tradeBox">
         <div className="flex justify-between items-center w-[90%] py-3">
@@ -181,13 +189,20 @@ export const SwapPage = () => {
         </div>
 
         <div className="relative">
-          <Input
-            placeholder="0"
+          <input
+            type="text"
+            className="ant-input"
             value={tokenOneAmount}
             onChange={(e) => changeAmount(e)}
             disabled={!prices}
           />
-          <Input placeholder="0" value={tokenTwoAmount} disabled={true} />
+
+          <input
+            className="ant-input"
+            placeholder="0"
+            value={tokenTwoAmount}
+            disabled={true}
+          />
 
           <button
             onClick={switchTokens}
@@ -214,13 +229,8 @@ export const SwapPage = () => {
         <button
           className="swapButton"
           disabled={!tokenOneAmount || !isConnected}
-          onClick={async () => {
-            const res = await fetchDexSwap(
-              tokenOne.address,
-              tokenTwo.address,
-              address!
-            );
-            setTransactionDetails(res);
+          onClick={() => {
+            fetchDexSwap();
           }}
         >
           Swap

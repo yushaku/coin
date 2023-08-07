@@ -1,5 +1,5 @@
 import React from "react";
 
 export const TokenPage = () => {
-  return <div>Token</div>;
+  return <div className="flexCenter min-h-[85dvh]">Token</div>;
 };

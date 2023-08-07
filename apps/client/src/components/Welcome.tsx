@@ -1,10 +1,13 @@
-import { TransactionContext } from "../hooks/TransactionContext";
+import { ADDRESS } from "../utils";
 import { shortenAddress } from "../utils/shortenAddress";
-import Loader from "./Loader";
-import { useContext } from "react";
-import { AiFillPlayCircle } from "react-icons/ai";
+import { abi } from "abi/contracts/Transactions.sol/Transactions.json";
+import { ConnectKitButton } from "connectkit";
+import { parseEther, ethers } from "ethers";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import { BsInfoCircle } from "react-icons/bs";
 import { SiEthereum } from "react-icons/si";
+import { useAccount } from "wagmi";
 
 const companyCommonStyles =
   "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
@@ -20,25 +23,88 @@ const Input = ({ placeholder, name, type, value, handleChange }: any) => (
   />
 );
 
+const { ethereum } = window;
+
 const Welcome = () => {
-  const {
-    currentAccount,
-    connectWallet,
-    handleChange,
-    sendTransaction,
-    formData,
-  } = useContext(TransactionContext);
+  const { address, isConnected } = useAccount();
+  const [formData, setformData] = useState({
+    addressTo: "",
+    amount: "",
+    keyword: "",
+    message: "",
+  });
+
+  function handleChange(e: any, name: string) {
+    setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
+  }
+
+  const createEthereumContract = async () => {
+    const provider = new ethers.BrowserProvider(ethereum);
+    const transProvider = new ethers.Contract(
+      ADDRESS.TRANSACTION,
+      abi,
+      provider
+    );
+    const signer = await provider.getSigner();
+
+    return { transProvider, signer };
+  };
+
+  async function sendTransaction() {
+    try {
+      if (ethereum) {
+        const { addressTo, amount, keyword, message } = formData;
+        const { transProvider } = await createEthereumContract();
+        const parsedAmount = parseEther(amount);
+
+        // await ethereum.request({
+        //   method: "eth_sendTransaction",
+        //   params: [
+        //     {
+        //       from: currentAccount,
+        //       to: addressTo,
+        //       gas: "0x5208", // 21000 GWEI
+        //       value: toBeHex(parsedAmount),
+        //     },
+        //   ],
+        // });
+
+        const estimateGas = await transProvider.addToBlock.estimateGas(
+          addressTo,
+          parsedAmount,
+          message,
+          keyword
+        );
+
+        toast(`gas fee: ${estimateGas}`);
+        const transactionHash = await transProvider.addToBlock.staticCall(
+          addressTo,
+          parsedAmount,
+          message,
+          keyword
+        );
+
+        const transactionsCount = await transProvider.getTransactionCount();
+        // setTransactionCount(formatUnits(transactionsCount));
+        // toast.success(`the transactions count: ${transactionCount}`);
+        // window.location.reload();
+      } else {
+        console.log("No ethereum object");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { addressTo, amount, keyword, message } = formData;
     e.preventDefault();
-
     if (!addressTo || !amount || !keyword || !message) return;
     sendTransaction();
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center min-h-[90dvh]">
       <div className="flex flex-col md:flex-row items-center gap-8 py-12">
         <div className="flex flex-1 justify-start items-start flex-col mf:mr-10">
           <h1 className="text-3xl sm:text-5xl text-white text-gradient py-1">
@@ -48,18 +114,8 @@ const Welcome = () => {
             Explore the crypto world. Buy and sell cryptocurrencies easily on
             Krypto.
           </p>
-          {!currentAccount && (
-            <button
-              type="button"
-              onClick={connectWallet}
-              className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-            >
-              <AiFillPlayCircle className="text-white mr-2" />
-              <p className="text-white text-base font-semibold">
-                Connect Wallet
-              </p>
-            </button>
-          )}
+
+          {!isConnected && <ConnectKitButton />}
 
           <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
             <div className={`rounded-tl-xl ${companyCommonStyles}`}>
@@ -90,7 +146,9 @@ const Welcome = () => {
               </div>
               <div>
                 <p className="text-white font-light text-sm">
-                  {shortenAddress(currentAccount || "")}
+                  {isConnected
+                    ? shortenAddress(address ?? "")
+                    : "Please connect to wallet first"}
                 </p>
                 <p className="text-white font-semibold text-lg mt-1">
                   Ethereum

@@ -1,6 +1,6 @@
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
-import { HomePage, SwapPage, TokenPage } from "./pages";
+import { HomePage, NFTs, SwapPage, TokenPage } from "./pages";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
@@ -13,6 +13,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/swap" element={<SwapPage />} />
           <Route path="/tokens" element={<TokenPage />} />
+          <Route path="/nfts" element={<NFTs />} />
         </Routes>
       </article>
 

@@ -1,7 +1,7 @@
 import App from "./App.tsx";
-import { TransactionsProvider } from "./hooks/TransactionContext.tsx";
 import "./main.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ConnectKitProvider } from "connectkit";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Toaster } from "react-hot-toast";
@@ -37,7 +37,7 @@ const wagmiClient = createConfig({
     new CoinbaseWalletConnector({
       chains,
       options: {
-        appName: "yushaku crpto",
+        appName: "YuCoin",
       },
     }),
   ],
@@ -48,12 +48,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <RecoilRoot>
       <ApolloProvider client={apolloClient}>
         <WagmiConfig config={wagmiClient}>
-          {/* <TransactionsProvider> */}
-          <Toaster />
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-          {/* </TransactionsProvider> */}
+          <ConnectKitProvider>
+            <Toaster />
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ConnectKitProvider>
         </WagmiConfig>
       </ApolloProvider>
     </RecoilRoot>

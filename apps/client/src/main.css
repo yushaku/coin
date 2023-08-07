@@ -250,6 +250,8 @@
   background-color: #1f2639 !important;
   color: white !important;
   border-width: 0px !important;
+  width: 100%;
+  padding: 0 6px;
   height: 96px !important;
   margin-bottom: 5px;
   font-size: 35px;
@@ -258,6 +260,10 @@
 
 .ant-input::placeholder {
   color: #5f6783 !important;
+}
+
+*:focus {
+  outline: none;
 }
 
 .ant-popover-arrow {
@@ -334,6 +340,7 @@
   color: white !important;
 }
 
+/* config color and with of scroll bar */
 ::-webkit-scrollbar-track {
   background-color: transparent;
 }
@@ -358,4 +365,16 @@
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
+}
+
+/* Hide Arrows From Input Number */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

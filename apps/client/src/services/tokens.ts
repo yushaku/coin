@@ -8,7 +8,7 @@ export const getTokenPrices = async (one: string, two: string) => {
   return res.data;
 };
 
-type Token = {
+export type Token = {
   ticker: string;
   img: string;
   name: string;
@@ -16,36 +16,9 @@ type Token = {
   decimals: number;
 };
 
-// export const fetchDexSwap = async (
-//   tokenOne: Token,
-//   tokenTwo: Token,
-//   accountAddress: `0x${string}`
-// ) => {
-//   const allowance = await axiosClient.get(
-//     `https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`
-//   );
-//
-//   if (allowance.data.allowance === "0") {
-//     const approve = await axiosClient.get(
-//       `https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${tokenOne.address}`
-//     );
-//
-//     setTxDetails(approve.data);
-//     console.log("not approved");
-//     return;
-//   }
-//
-//   const tx = await axiosClient.get(
-//     `https://api.1inch.io/v5.0/1/swap?fromTokenAddress=${
-//       tokenOne.address
-//     }&toTokenAddress=${tokenTwo.address}&amount=${tokenOneAmount.padEnd(
-//       tokenOne.decimals + tokenOneAmount.length,
-//       "0"
-//     )}&fromAddress=${address}&slippage=${slippage}`
-//   );
-//
-//   let decimals = Number(`1E${tokenTwo.decimals}`);
-//   setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
-//
-//   setTxDetails(tx.data.tx);
-// };
+export const getQuote = async (src: string, dst: string, amount: number) => {
+  const res = await axiosClient.get("https://api.1inch.dev/swap/v5.2/1/quote", {
+    params: { src, dst, amount },
+  });
+  return res.data;
+};

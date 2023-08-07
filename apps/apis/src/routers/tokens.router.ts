@@ -20,7 +20,14 @@ tokensRouter.get("/pairToken", async (req: Request, res: Response) => {
 });
 
 tokensRouter.get("/", async (_req: Request, res: Response) => {
-  res.json({ message: "ok" });
+  try {
+    const data = await tokensService.getToptoken();
+    res.status(200);
+    res.json(data);
+  } catch (error: any) {
+    console.error(error);
+    res.json({ error: error.message });
+  }
 });
 
 export default tokensRouter;

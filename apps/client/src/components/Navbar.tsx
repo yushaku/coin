@@ -1,11 +1,9 @@
-import Eth from "../../public/eth.svg";
-import { shortenAddress } from "../utils";
+import { ChainIcon, ConnectKitButton } from "connectkit";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { HiMenuAlt4 } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { useAccount, useConnect } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
+import { useNetwork, useSwitchNetwork } from "wagmi";
 
 const NavBarItem = ({
   title,
@@ -19,12 +17,12 @@ const NavBarItem = ({
   </li>
 );
 
-const pages = ["Swap", "Tokens"];
+const pages = ["Swap", "Tokens", "NFTs"];
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = React.useState(false);
-  const { address, isConnected } = useAccount();
-  const { connect } = useConnect({ connector: new InjectedConnector() });
+  const { chains, error, isLoading, switchNetwork } = useSwitchNetwork();
+  const { chain } = useNetwork();
 
   return (
     <nav className="w-full flex md:justify-center justify-between items-center p-4">
@@ -40,17 +38,16 @@ const Navbar = () => {
         ))}
       </ul>
 
-      <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
+      <ul className="text-white md:flex hidden list-none flex-row gap-4 justify-between items-center flex-initial">
         <li>
           <div className="flexCenter gap-2">
-            <img src={Eth} alt="eth" className="w-6 h-6" />
+            <ChainIcon id={chain?.id ?? 1} />
+            {chain?.name}
           </div>
         </li>
-        <li
-          className="bg-[#131a2a] py-1 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#293249]"
-          onClick={() => connect()}
-        >
-          {isConnected ? shortenAddress(address!) : "Connect"}
+
+        <li>
+          <ConnectKitButton />
         </li>
       </ul>
 

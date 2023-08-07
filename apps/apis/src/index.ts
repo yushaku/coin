@@ -1,4 +1,5 @@
 import authRouter from "./routers/auth.router";
+import nftRouter from "./routers/nft.router";
 import tokensRouter from "./routers/tokens.router";
 import chainRouter from "./routers/wallet.router";
 import cors from "cors";
@@ -21,6 +22,7 @@ app.use(
 app.use("/tokens", tokensRouter);
 app.use("/wallet", chainRouter);
 app.use("/auth", authRouter);
+app.use("/nft", nftRouter);
 app.get("/", (_req: Request, res: Response) => {
   res.send("<h1>Express + TypeScript Server</h1>");
 });

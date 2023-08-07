@@ -1,6 +1,7 @@
 import { useFetch, TransactionContext } from "../hooks";
 import { historyMoc, shortenAddress } from "../utils";
 import { useContext } from "react";
+import { useAccount } from "wagmi";
 
 const TransactionsCard = ({
   addressTo,
@@ -65,12 +66,12 @@ const TransactionsCard = ({
 };
 
 const Transactions = () => {
-  const { transactions, currentAccount } = useContext(TransactionContext);
+  const { address } = useAccount();
 
   return (
     <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
       <div className="flex flex-col md:p-12 py-12 px-4">
-        {currentAccount ? (
+        {address ? (
           <h3 className="text-white text-3xl text-center my-2">
             Latest Transactions
           </h3>
@@ -81,7 +82,7 @@ const Transactions = () => {
         )}
 
         <div className="flex flex-wrap justify-center items-center mt-10">
-          {[...historyMoc, ...transactions].map((transaction, i) => (
+          {[...historyMoc].map((transaction, i) => (
             <TransactionsCard key={i} {...transaction} />
           ))}
         </div>
