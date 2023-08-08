@@ -1,5 +1,5 @@
 import fs from "fs";
-import { run } from "hardhat";
+import { ethers, run } from "hardhat";
 
 export const verifyContract = async (contractAddress: string, args: any[]) => {
   console.log("Verifying contract...");

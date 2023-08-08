@@ -9,11 +9,12 @@
     "test": "npx hardhat test",
     "dev": "npx hardhat node",
     "deploy:local": "npx hardhat run scripts/deploy.ts --network hardhat",
-    "deploy:sepolia": "npx hardhat run scripts/deploy.zombie.ts --network sepolia"
+    "deploy:sepolia": "npx hardhat run scripts/deploy.ts --network sepolia"
   },
   "dependencies": {
-    "@chainlink/contracts": "^0.6.1",
-    "@openzeppelin/contracts": "^4.9.2",
+    "@openzeppelin/contracts": "^3.4.2",
+    "@uniswap/v3-core": "^1.0.1",
+    "@uniswap/v3-periphery": "^1.4.3",
     "dotenv": "^16.3.1",
     "ethers": "^6.6.3",
     "hardhat": "^2.16.1"
